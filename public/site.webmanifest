@@ -1,0 +1,8 @@
+{
+  "name": "Bettabyte Store",
+  "short_name": "Bettabyte",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

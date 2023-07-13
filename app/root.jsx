@@ -17,6 +17,7 @@ import {seoPayload} from '~/lib/seo.server';
 import {Layout} from '~/components';
 
 import favicon from '../public/favicon.svg';
+import siteWebmanifest from '../public/site.webmanifest';
 
 import {GenericError} from './components/GenericError';
 import {NotFound} from './components/NotFound';
@@ -36,6 +37,10 @@ export const links = () => {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {
+      rel: 'manifest',
+      href: siteWebmanifest,
+    },
   ];
 };
 
@@ -65,6 +70,30 @@ export default function App() {
   const data = useLoaderData();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
+  const registerServiceWorker = () => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker
+          .register('./service-worker.js')
+          .then(
+            function (registration) {
+              console.log(
+                'ServiceWorker registration successful with scope: ',
+                registration.scope,
+              );
+            },
+            function (err) {
+              console.log('ServiceWorker registration failed: ', err);
+            },
+          )
+          .catch(function (err) {
+            console.log(err);
+          });
+      });
+    } else {
+      console.log('service worker is not supported');
+    }
+  };
 
   useAnalytics(hasUserConsent, locale);
 
@@ -86,6 +115,7 @@ export default function App() {
         </Layout>
         <ScrollRestoration />
         <Scripts />
+        <script>{registerServiceWorker()}</script>
       </body>
     </html>
   );
