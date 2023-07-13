@@ -17,7 +17,6 @@ import {seoPayload} from '~/lib/seo.server';
 import {Layout} from '~/components';
 
 import favicon from '../public/favicon.svg';
-import siteWebmanifest from '../public/site.webmanifest';
 
 import {GenericError} from './components/GenericError';
 import {NotFound} from './components/NotFound';
@@ -38,8 +37,26 @@ export const links = () => {
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
     {
+      rel: 'apple-touch-icon',
+      type: 'image/png',
+      sizes: '180x180',
+      href: './apple-touch-icon.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      href: './favicon-32x32.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '16x16',
+      href: './favicon-16x16.png',
+    },
+    {
       rel: 'manifest',
-      href: siteWebmanifest,
+      href: './site.webmanifest',
     },
   ];
 };
@@ -70,31 +87,6 @@ export default function App() {
   const data = useLoaderData();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
-  const registerServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker
-          .register('./service-worker.js')
-          .then(
-            function (registration) {
-              console.log(
-                'ServiceWorker registration successful with scope: ',
-                registration.scope,
-              );
-            },
-            function (err) {
-              console.log('ServiceWorker registration failed: ', err);
-            },
-          )
-          .catch(function (err) {
-            console.log(err);
-          });
-      });
-    } else {
-      console.log('service worker is not supported');
-    }
-  };
-
   useAnalytics(hasUserConsent, locale);
 
   return (
@@ -115,7 +107,33 @@ export default function App() {
         </Layout>
         <ScrollRestoration />
         <Scripts />
-        <script>{registerServiceWorker()}</script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function () {
+                navigator.serviceWorker
+                  .register('./service-worker.js')
+                  .then(
+                    function (registration) {
+                      console.log(
+                        'ServiceWorker registration successful with scope: ',
+                        registration.scope,
+                      );
+                    },
+                    function (err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    },
+                  )
+                  .catch(function (err) {
+                    console.log(err);
+                  });
+              });
+            } else {
+              console.log('service worker is not supported');
+            }`,
+          }}
+        />
       </body>
     </html>
   );
