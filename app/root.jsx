@@ -16,8 +16,6 @@ import invariant from 'tiny-invariant';
 import {seoPayload} from '~/lib/seo.server';
 import {Layout} from '~/components';
 
-import favicon from '../public/favicon.svg';
-
 import {GenericError} from './components/GenericError';
 import {NotFound} from './components/NotFound';
 import styles from './styles/app.css';
@@ -35,7 +33,11 @@ export const links = () => {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: './favicon.ico',
+    },
     {
       rel: 'apple-touch-icon',
       type: 'image/png',
@@ -56,7 +58,7 @@ export const links = () => {
     },
     {
       rel: 'manifest',
-      href: './site.webmanifest',
+      href: './sitemanifest.json',
     },
   ];
 };
