@@ -59,6 +59,7 @@ export const links = () => {
     {
       rel: 'manifest',
       href: '/site.webmanifest',
+      crossOrigin: 'use-credentials',
     },
   ];
 };
